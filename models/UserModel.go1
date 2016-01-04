@@ -1,0 +1,47 @@
+package models
+
+import (
+	"fmt"
+	"github.com/astaxie/beego"
+	"github.com/astaxie/beego/orm"
+	_ "github.com/go-sql-driver/mysql"
+)
+
+func init() {
+	dbHost := beego.AppConfig.String("DBHost")
+	dbPort := beego.AppConfig.String("DBPort")
+	dbUser := beego.AppConfig.String("DBUser")
+	dbPass := beego.AppConfig.String("DBPass")
+	dbName := beego.AppConfig.String("DBName")
+	dbDSN := fmt.Sprintf("%s:%s@tcp(%s:%s)/%s?charset=utf8", dbUser, dbPass, dbHost, dbPort, dbName)
+
+	orm.RegisterDriver("mysql", orm.DR_MySQL)
+	orm.RegisterDataBase("default", "mysql", dbDSN)
+	orm.RegisterModel(new(User))
+	//orm.RunSyncdb("default", false, true)
+}
+
+type User struct {
+	Id         int
+	UserName   string
+	Password   string
+	Email      string
+	createData string
+}
+
+func Login(userName string, password string) bool {
+	o := orm.NewOrm()
+	//var maps []orm.Params
+
+	//result := o.Read(&user)
+	//fmt.Println(result)
+	rs := o.Raw("select count(1) as count from t_user where username=? and password=?", userName, password)
+	result, err := rs.Exec()
+	if err != nil {
+		fmt.Println(err)
+	}
+
+	fmt.Println(result)
+
+	return false
+}
