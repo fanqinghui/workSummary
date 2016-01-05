@@ -13,5 +13,6 @@ func init() {
 	beego.Router("/register", &controllers.RegisterController{})
 	beego.Router("/toRegister", &controllers.ToRegisterController{})
 	beego.Router("/todayWork", &controllers.TodayWorkController{})
+	beego.Router("/saveTodayWork", &controllers.SaveTodayWorkController{})
 
 }
