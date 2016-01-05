@@ -50,3 +50,41 @@ func DoJsonData(body []byte) string {
 	bodyStr = strings.Replace(bodyStr, "}", "\"}", 1)
 	return bodyStr
 }
+
+func Byte2Str(data []byte) string {
+	return string(data)
+}
+
+func GetMonthByStr(month string) int {
+	intMonth := 0
+	switch month {
+	case "January Month":
+		intMonth = 1
+	case "February":
+		intMonth = 2
+	case "March":
+		intMonth = 3
+	case "April":
+		intMonth = 4
+	case "May":
+		intMonth = 5
+	case "June":
+		intMonth = 6
+	case "July":
+		intMonth = 7
+	case "August":
+		intMonth = 8
+	case "September":
+		intMonth = 9
+	case "October":
+		intMonth = 10
+	case "November":
+		intMonth = 11
+	case "December":
+		intMonth = 12
+	default:
+		intMonth = 0
+	}
+
+	return intMonth
+}
