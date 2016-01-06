@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"encoding/json"
 	"fmt"
 	"log"
 	"time"
@@ -28,6 +29,9 @@ type RegisterController struct {
 	beego.Controller
 }
 type TodayWorkController struct {
+	beego.Controller
+}
+type SaveTodayWorkController struct {
 	beego.Controller
 }
 
@@ -130,7 +134,48 @@ func (this *TodayWorkController) Get() {
 	//查询当前用户的日报
 	nowTime := time.Now()
 	fmt.Println(nowTime.Year(), nowTime.Month(), nowTime.Day())
-	//查询数据库。如果有，就	set
-	this.Data["content"] = beego.AppConfig.String("systemName")
+	dailyWork, ok := models.GetTodayWork(nowTime.Year(), int(nowTime.Month()), nowTime.Day())
+	if ok {
+		fmt.Println(dailyWork)
+		this.Data["ContentId"] = dailyWork.Id
+		this.Data["Content"] = dailyWork.Content
+	} else {
+		fmt.Println("无今日日报")
+	}
+
 	this.TplNames = "todayWork.html"
+}
+
+/**
+今日工作
+**/
+func (this *SaveTodayWorkController) Post() {
+	fmt.Println("SaveTodayWorkController")
+	content := this.GetString("content")
+	contentId, _ := this.GetInt("contentId")
+	fmt.Println(contentId, content)
+
+	user := this.GetSession("User")
+	if u, ok := user.(models.User); ok {
+
+		nowTime := time.Now()
+		todayWork := models.DailyWork{
+			Id:      contentId,
+			Content: content,
+			Year:    nowTime.Year(),
+			Month:   int(nowTime.Month()),
+			Day:     nowTime.Day(),
+			UId:     u.Id,
+		}
+
+		returnJson := models.SaveTodayWork(todayWork)
+
+		if key, err := json.Marshal(returnJson); err == nil {
+			fmt.Println(string(key))
+			this.Data["json"] = string(key)
+		}
+	} else {
+		fmt.Println("user is null")
+	}
+	this.ServeJson()
 }
