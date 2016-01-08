@@ -187,6 +187,9 @@ func (this *SaveTodayWorkController) SaveTodayWork() {
 	this.ServeJson()
 }
 
+/**
+以下是登录校验
+**/
 func (this *TodayWorkController) Prepare() {
 	fmt.Println("todayWorkController Prepare ing ==========================")
 	user := this.GetSession("User")
@@ -194,4 +197,20 @@ func (this *TodayWorkController) Prepare() {
 		this.Redirect("/", 302)
 	}
 
+}
+
+func (this *LogoutController) Prepare() {
+	fmt.Println("LogoutController Prepare ing ==========================")
+	user := this.GetSession("User")
+	if _, ok := user.(models.User); !ok {
+		this.Redirect("/", 302)
+	}
+}
+
+func (this *SaveTodayWorkController) Prepare() {
+	fmt.Println("SaveTodayWorkController Prepare ing ==========================")
+	user := this.GetSession("User")
+	if _, ok := user.(models.User); !ok {
+		this.Redirect("/", 302)
+	}
 }
