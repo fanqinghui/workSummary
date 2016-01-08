@@ -8,11 +8,10 @@ import (
 
 func init() {
 	beego.Router("/", &controllers.MainController{})
-	beego.Router("/login", &controllers.LoginController{})
-	beego.Router("/logout", &controllers.LogoutController{})
-	beego.Router("/register", &controllers.RegisterController{})
-	beego.Router("/toRegister", &controllers.ToRegisterController{})
-	beego.Router("/todayWork", &controllers.TodayWorkController{})
-	beego.Router("/saveTodayWork", &controllers.SaveTodayWorkController{})
-
+	beego.Router("/login", &controllers.LoginController{}, "post:Login")
+	beego.Router("/logout", &controllers.LogoutController{}, "get:Logout")
+	beego.Router("/register", &controllers.RegisterController{}, "post:Register")
+	beego.Router("/toRegister", &controllers.ToRegisterController{}, "get:ToRegister")
+	beego.Router("/todayWork", &controllers.TodayWorkController{}, "get:TodayWork")
+	beego.Router("/saveTodayWork", &controllers.SaveTodayWorkController{}, "post:SaveTodayWork")
 }

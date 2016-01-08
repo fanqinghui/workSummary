@@ -38,7 +38,7 @@ type SaveTodayWorkController struct {
 /**
 登录
 **/
-func (this *LoginController) Post() {
+func (this *LoginController) Login() {
 
 	fmt.Println("Login")
 	loginName := this.GetString("loginName")
@@ -76,7 +76,7 @@ func (this *LoginController) Post() {
 /**
 退出
 **/
-func (this *LogoutController) Get() {
+func (this *LogoutController) Logout() {
 	user := this.GetSession("User") //存放session
 	if u, ok := user.(models.User); ok {
 		fmt.Println(u.LoginName, u.LoginName, u.Id)
@@ -87,9 +87,16 @@ func (this *LogoutController) Get() {
 }
 
 /**
+跳转到注册页面
+**/
+func (c *ToRegisterController) ToRegister() {
+	c.TplNames = "register.html"
+}
+
+/**
 注册
 **/
-func (this *RegisterController) Post() {
+func (this *RegisterController) Register() {
 	fmt.Println("register")
 	loginName := this.GetString("loginName")
 	password := this.GetString("password")
@@ -130,7 +137,7 @@ func (this *RegisterController) Post() {
 /**
 今日工作
 **/
-func (this *TodayWorkController) Get() {
+func (this *TodayWorkController) TodayWork() {
 	//查询当前用户的日报
 	nowTime := time.Now()
 	fmt.Println(nowTime.Year(), nowTime.Month(), nowTime.Day())
@@ -149,7 +156,7 @@ func (this *TodayWorkController) Get() {
 /**
 今日工作
 **/
-func (this *SaveTodayWorkController) Post() {
+func (this *SaveTodayWorkController) SaveTodayWork() {
 	fmt.Println("SaveTodayWorkController")
 	content := this.GetString("content")
 	contentId, _ := this.GetInt("contentId")
@@ -178,4 +185,13 @@ func (this *SaveTodayWorkController) Post() {
 		fmt.Println("user is null")
 	}
 	this.ServeJson()
+}
+
+func (this *TodayWorkController) Prepare() {
+	fmt.Println("todayWorkController Prepare ing ==========================")
+	user := this.GetSession("User")
+	if _, ok := user.(models.User); !ok {
+		this.Redirect("/", 302)
+	}
+
 }

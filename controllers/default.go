@@ -17,7 +17,3 @@ func (c *MainController) Get() {
 	c.Data["CompanyName"] = beego.AppConfig.String("companyName")
 	c.TplNames = "login.html"
 }
-
-func (c *ToRegisterController) Get() {
-	c.TplNames = "register.html"
-}
